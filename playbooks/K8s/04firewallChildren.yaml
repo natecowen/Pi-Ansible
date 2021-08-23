@@ -1,0 +1,12 @@
+---
+- hosts: k8children
+  user: ncowen
+  become: yes
+
+  tasks:
+
+  - name: Add Firewall Rules to FirewallD to Master
+    shell: |
+      firewall-cmd --permanent --zone=public --add-port=10250/tcp
+      firewall-cmd --permanent --zone=public --add-port=30000-32767/tcp 
+      firewall-cmd --reload

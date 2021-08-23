@@ -1,0 +1,11 @@
+---
+- hosts: all
+  user: ncowen
+  become: yes
+
+  tasks:
+  - name: upgrade all packages
+    raw: /usr/bin/dnf -y upgrade
+  
+  - name: reboot machine now
+    reboot:

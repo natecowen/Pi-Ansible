@@ -1,0 +1,25 @@
+---
+- hosts: nucs
+  user: ncowen
+  become: yes
+
+  tasks:
+  - name: turn off swap
+    shell: |
+      swapoff -a
+
+  # (shouldn't exist since we use zram), but just in case
+  - name: Comment Out Swap in Fstab 
+    replace:
+      path: /etc/fstab
+      regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+      replace: '# \1'
+
+
+  # https://fedoraproject.org/wiki/QA:Testcase_SwapOnZRAM_disable
+  - name: Override/Remove zram
+    shell : |
+      touch /etc/systemd/zram-generator.conf
+
+  - name: 
+    reboot:

@@ -1,0 +1,10 @@
+---
+- hosts: nucs
+  user: ncowen
+
+  tasks:
+  - name: upgrade all packages
+    raw: /usr/bin/dnf -y upgrade
+
+  - name: reboot machine now
+    reboot:
