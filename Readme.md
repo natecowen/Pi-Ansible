@@ -9,6 +9,10 @@ Overview: This will cover the installation of Ansible on the Raspberry Pi OS. It
    - Master Node
    - (3) Child Nodes 
 
+
+> **Before Starting: Ensure each that each machine has a static ip and unique hostname** 
+> Use `hostnamectl set-hostname 'foo'` to set a hostname
+
 ---
 
 ## Installation Steps for Ansible on Raspberry Pi
@@ -160,9 +164,34 @@ ansible all -a "systemctl restart containerd" --become --ask-become-pass
 ## Install K8s
 
 ```shell
-# TODO: Install Kubelet, Kubectl, KubeAdmin
-# TODO: Join Nodes together
-# TODO: Install Calico
+# Install Kubelet, Kubectl, KubeAdmin
+ansible-playbook 06K8sSetup.yaml --ask-become-pass
+
+# Initialize the Master
+ansible-playbook 07initMaster.yaml --ask-become-pass
+
+# Setup Calico - TODO: Figure out issue with kubectl command, worked fine with the join 09join file
+# This was part of 07initMaster.yaml file, but it was throwing an error when running kubectl. 
+# I had to manually run kubectl apply -f calico.yaml 
+ansible-playbook 08calico.yaml --ask-become-pass
+
+# : Join Nodes together
+ansible-playbook 09joinMaster.yaml --ask-become-pass
+
+# Connect to the Master node and verify nodes health
+kubectl get nodes
+
+
 # TODO: Install Ingress Traefik
+ansible k8children -a "kubeadm reset" --become --ask-become-pass
+
+ansible k8children -a "rm -rf /etc/cni/net.d" --become --ask-become-pass
+
 
 ```
+
+---
+
+### Useful Links
+
+- [Ansible Kubernetes Tutorial](https://buildvirtual.net/deploy-a-kubernetes-cluster-using-ansible/)

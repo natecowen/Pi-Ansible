@@ -1,0 +1,17 @@
+---
+- hosts: k8master
+  user: ncowen
+  become: yes
+
+  tasks:
+
+  - name: Download Calico Pod Network
+    shell: curl https://docs.projectcalico.org/manifests/calico.yaml -O
+    args: 
+      chdir: /home/ncowen
+
+
+  - name: Install Calico Pod Network
+    shell: kubectl apply -f calico.yaml 
+    args: 
+      chdir: /home/ncowen

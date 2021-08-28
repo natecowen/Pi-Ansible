@@ -1,0 +1,34 @@
+---
+- hosts: k8master
+  user: ncowen
+  become: yes
+
+  tasks:
+
+  - name: Initialize the master and save output to txt file (prevents reinitializing)
+    shell: kubeadm init >> cluster_initialized.txt
+    args:
+      chdir: /home/ncowen
+      creates: cluster_initialized.txt
+      
+
+  - name: Create .Kube Directory
+    file: 
+      path: /home/ncowen/.kube
+      state: directory
+      mode: 0755
+
+  - name: Copy Admin Config to .Kube Directory
+    copy: 
+      src: /etc/kubernetes/admin.conf
+      dest: /home/ncowen/.kube/config
+      remote_src: yes
+      owner: ncowen
+
+  - name: Get the Join Token from K8s & save to variable
+    shell: kubeadm token create  --print-join-command
+    register: kubernetes_join_command
+
+
+  - name: Copy join command to local file
+    local_action: copy content="{{ kubernetes_join_command.stdout_lines[0] }}" dest="/home/pi/ansible-playbooks/k8s/kubernetes_join_command" mode=0777

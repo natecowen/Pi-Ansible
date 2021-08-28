@@ -1,0 +1,16 @@
+---
+- hosts: k8children
+  user: ncowen
+  become: yes
+
+  tasks:
+
+  - name: Copy the Join Command from Ansible to worker nodes
+    copy: 
+      src: /home/pi/ansible-playbooks/k8s/kubernetes_join_command
+      dest: /home/ncowen/kubernetes_join_command
+      mode: 0777
+      
+
+  - name: Join Worker Nodes to the cluster
+    command: sh /home/ncowen/kubernetes_join_command
