@@ -130,7 +130,7 @@ ansible nucs -a "firewall-cmd --list-ports --zone=public" --become --ask-become-
 
 ---
 
-## Install K8s. 
+## Prepare for K8s Install. 
 
 Run each item in order in the playbooks/k8s directory
 ```shell 
@@ -138,10 +138,28 @@ ansible-playbook 01disableswap.yaml --ask-become-pass
 ansible-playbook 02prepForK8s.yaml --ask-become-pass
 ansible-playbook 03firewallMaster.yaml --ask-become-pass
 ansible-playbook 04firewallChildren.yaml --ask-become-pass
-
-# TODO: Test playbook 05
 ansible-playbook 05containerdInstall.yaml --ask-become-pass
 
+# test containerd
+ansible all -a "ctr --version"
+
+# Set Cgroup Driver to SystemD
+# kubernetes.io/docs/setup/production-environment/container-runtimes/#containerd
+# SSH into each machine and edit the CGroup Driver in config.toml
+sudo nano -l /etc/containerd/config.toml
+
+# Add under [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options] (around line 96 )
+ SystemdCgroup = true
+
+# On the Ansible machine run 
+ansible all -a "systemctl restart containerd" --become --ask-become-pass
+```
+
+---
+
+## Install K8s
+
+```shell
 # TODO: Install Kubelet, Kubectl, KubeAdmin
 # TODO: Join Nodes together
 # TODO: Install Calico
