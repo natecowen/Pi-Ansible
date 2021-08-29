@@ -10,7 +10,11 @@
     args: 
       chdir: /home/ncowen
 
-
+  - name: Add Firewall Rules to for BGP Calico
+    shell: |
+      firewall-cmd --permanent --zone=public --add-port=179/tcp
+      firewall-cmd --reload
+    
   - name: Install Calico Pod Network
     shell: kubectl apply -f calico.yaml 
     args: 
