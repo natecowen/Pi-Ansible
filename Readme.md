@@ -1,6 +1,6 @@
 # Ansible Setup Raspberry Pi OS
 
-Overview: This will cover the installation of Ansible on the Raspberry Pi OS. It also will contain playbooks to install/setup Fedora with Kubernetes, Calico, and Traefik.
+Overview: This will cover the installation of Ansible on the Raspberry Pi OS. It also will contain playbooks to install/setup Fedora with Kubernetes & Weave.
 
 **Hardware Overview**
 1. Raspberry Pi 
@@ -171,6 +171,7 @@ ansible-playbook 06K8sSetup.yaml --ask-become-pass
 ansible-playbook 07initMaster.yaml --ask-become-pass
 
 # Did not fully test this playbook, but it's what i manually ran on master
+# https://www.weave.works/docs/net/latest/kubernetes/kube-addon/
 ansible-playbook 08weave.yaml --ask-become-pass
 
 # : Join Nodes together

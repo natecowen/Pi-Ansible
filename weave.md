@@ -3,6 +3,8 @@
 
 Overview: The linux box (Fedora/CoreOS/RHEL) may be missing part of the required container network plugins. Or you may be like me and have accidentally nuked them from your machine. Below is an easy way to reinstall the missing plugins. 
 
+> [Check for Latest Releases Here](https://github.com/containernetworking/plugins/releases)
+
 ```shell
 
 mkdir -p /tmp/cni-plugins
