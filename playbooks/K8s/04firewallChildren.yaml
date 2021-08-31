@@ -9,4 +9,6 @@
     shell: |
       firewall-cmd --permanent --zone=public --add-port=10250/tcp
       firewall-cmd --permanent --zone=public --add-port=30000-32767/tcp 
+      firewall-cmd --permanent --zone=public --add-port=6783/udp --add-port=6784/udp 
+      firewall-cmd --permanent --zone=public --add-port=6783/tcp 
       firewall-cmd --reload

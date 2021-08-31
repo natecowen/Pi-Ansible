@@ -1,0 +1,17 @@
+---
+- hosts: k8master
+  user: ncowen
+  become: yes
+
+  tasks:
+
+  - name: Download Weave Pod Network
+    shell: curl "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')" -o weavenet.yaml
+    args: 
+      chdir: /home/ncowen
+
+    
+  - name: Install Weave Pod Network
+    shell: kubectl apply -f weavenet.yaml
+    args: 
+      chdir: /home/ncowen

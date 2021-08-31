@@ -170,10 +170,8 @@ ansible-playbook 06K8sSetup.yaml --ask-become-pass
 # Initialize the Master
 ansible-playbook 07initMaster.yaml --ask-become-pass
 
-# Setup Calico - TODO: Figure out issue with kubectl command, worked fine with the join 09join file
-# This was part of 07initMaster.yaml file, but it was throwing an error when running kubectl. 
-# I had to manually run kubectl apply -f calico.yaml 
-ansible-playbook 08calico.yaml --ask-become-pass
+# Did not fully test this playbook, but it's what i manually ran on master
+ansible-playbook 08weave.yaml --ask-become-pass
 
 # : Join Nodes together
 ansible-playbook 09joinMaster.yaml --ask-become-pass
@@ -181,8 +179,17 @@ ansible-playbook 09joinMaster.yaml --ask-become-pass
 # Connect to the Master node and verify nodes health
 kubectl get nodes
 
+#NOTE IF WEAVE WON'T START - Follow the instructions in weave.md
 
-# TODO: Install Ingress Traefik
+```
+
+---
+
+
+## Quickly Reset K8s
+
+```shell
+
 ansible k8children -a "kubeadm reset" --become --ask-become-pass
 
 ansible k8children -a "rm -rf /etc/cni/net.d" --become --ask-become-pass
